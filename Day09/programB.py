@@ -41,20 +41,54 @@ def check_adj(Map, x, y):
 	return s + 1
 
 def check_map(Map):
+	lowPoints = []
 	risk = 0
 	for i in range(1, len(Map[0]) - 1):
 		for j in range(1, len(Map) - 1):
-			risk += check_adj(Map, j, i)
+			r = check_adj(Map, j, i)
+			if r > 0:
+				risk += r
+				lowPoints.append((j, i))
 			
 	
-	return risk
+	return risk, lowPoints
+
+def find_basin(Map, lowPoints):
+	sizes = []
+	for point in lowPoints:
+		size = 0
+		froniter = [point]
+		visited = set()
+
+		while froniter:
+			x, y = froniter.pop(0)
+	
+			if (x, y) in visited:
+				continue
+
+			visited.add((x, y))
+			if Map[x][y] < 9:
+				size += 1
+
+
+			if Map[x][y] < 9:
+				froniter.append((x+1, y))
+				froniter.append((x-1, y))
+				froniter.append((x, y+1))
+				froniter.append((x, y-1))
+
+		sizes.append(size)
+
+	return sizes
 
 def main():
 	Map = read_map()
 	pmap(Map)
-	print(len(Map), len(Map[0]))
-	risk = check_map(Map)
-	print(risk)
+	risk, lowPoints = check_map(Map)
+	print(risk, lowPoints)
+	sizes= find_basin(Map, lowPoints)
+	s = sorted(sizes, reverse=True)[0:3]
+	print(s[0] * s[1] * s[2])
 
 if __name__ == "__main__":
 	main()

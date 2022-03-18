@@ -1,4 +1,4 @@
 # advent-2021
-Data.txt is user data
+Advent of Code 2021
 
-data.txt is test case
+Data.txt is user data
